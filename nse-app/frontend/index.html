@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NSE Live Data</title>
+    <style>
+        table { border-collapse: collapse; width: 80%; margin: 20px; }
+        th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
+        th { background-color: #f2f2f2; }
+        .tab { margin: 20px; }
+    </style>
+</head>
+<body>
+    <div class="tab">
+        <button onclick="showTab('gainers')">Top Gainers</button>
+        <button onclick="showTab('losers')">Top Losers</button>
+    </div>
+    <div id="content"></div>
+
+    <script>
+        async function loadData(endpoint) {
+            const response = await fetch(endpoint);
+            const data = await response.json();
+            let html = `<table><tr><th>Symbol</th><th>Last Price</th><th>Change</th></tr>`;
+            data.forEach(item => {
+                html += `<tr><td>${item.symbol}</td><td>${item.lastPrice}</td><td>${item.pChange}%</td></tr>`;
+            });
+            html += `</table>`;
+            document.getElementById("content").innerHTML = html;
+        }
+
+        function showTab(tabName) {
+            const endpoint = `/api/${tabName}`;
+            loadData(endpoint);
+        }
+
+        // Auto-refresh every 5 minutes
+        setInterval(() => showTab('gainers'), 300000);
+        showTab('gainers'); // Initial load
+    </script>
+</body>
+</html>
