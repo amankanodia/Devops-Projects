@@ -1,0 +1,3 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['compute', 'ssh', 'nse-data-vm', '--command', 'cd /home/nse-app && git pull && sudo systemctl restart flask-app']
